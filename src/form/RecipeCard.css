@@ -1,0 +1,17 @@
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1em;
+    margin: 1em;
+    background-color: #f9f9f9;
+    box-shadow: #ccc 2px 2px 5px;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe-name {
+    margin: 0;
+    font-weight: bold;
+    font-size: x-large;
+}
