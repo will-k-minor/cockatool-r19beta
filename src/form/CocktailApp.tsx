@@ -1,15 +1,17 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import { RecipeType } from './CocktailTypes';
 import IngredientCard from './IngredientCard';
 import RecipeCard from './RecipeCard';
 import './CocktailApp.css';
+import { start } from 'repl';
 
 
 export const CocktailApp = () => {
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    // const [loading, setLoading] = useState<boolean>(false);
+    const [isPending, startTransition] = useTransition();
 
     // Equivalent to Svelte's reactive statement for logging ingredients changes
     useEffect(() => {
@@ -29,26 +31,26 @@ export const CocktailApp = () => {
     };
 
     const fetchCocktails = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch(
-                `https://api.api-ninjas.com/v1/cocktail?ingredients=${ingredients.join(',')}`, 
-                {
-                    headers: { 'X-Api-Key': 'W+y19BJkxOROkRuXSumxeg==gTF60d4rnpVEv6mx' }
+        startTransition(async() => {
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            try {
+                const response = await fetch(
+                    `https://api.api-ninjas.com/v1/cocktail?ingredients=${ingredients.join(',')}`, 
+                    {
+                        headers: { 'X-Api-Key': 'W+y19BJkxOROkRuXSumxeg==gTF60d4rnpVEv6mx' }
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            );
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const data = await response.json();
+                setRecipes(data);
+                console.log(data);
+            } catch (error) {
+                console.error('Fetch error:', error);
+                setRecipes([]);
             }
-            const data = await response.json();
-            setRecipes(data);
-            console.log(data);
-        } catch (error) {
-            console.error('Fetch error:', error);
-            setRecipes([]);
-        } finally {
-            setLoading(false);
-        }
+        });
     };
 
     return (
@@ -72,15 +74,14 @@ export const CocktailApp = () => {
                     <button className="add-ingredient-button" onClick={addIngredientField}>+</button>
                 </div>
             </div>
-
-            {recipes.length === 0 ? (
+                
+            {isPending ? (<p> Loading ...</p>) :
+             recipes.length === 0 ? (
                 <p>No recipes found</p>
-            ) : loading ? (
-                <p>Loading...</p>
-            ) : (
+                ) : (
                 <p>Recipes found: {recipes.length}</p>
-            )}
-
+                )
+            }
             {recipes.map((recipe, i) => (
                 <RecipeCard key={`cocktail-recipe-${i}`} recipe={recipe} />
             ))}
