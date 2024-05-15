@@ -4,14 +4,16 @@ import { RecipeType } from './CocktailTypes';
 import IngredientCard from './IngredientCard';
 import RecipeCard from './RecipeCard';
 import './CocktailApp.css';
-import { start } from 'repl';
 
 
 export const CocktailApp = () => {
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [recipes, setRecipes] = useState<RecipeType[]>([]);
-    // const [loading, setLoading] = useState<boolean>(false);
+    
     const [isPending, startTransition] = useTransition();
+
+
+    const [isLoading, setIsLoading] = useState(false);
 
     // Equivalent to Svelte's reactive statement for logging ingredients changes
     useEffect(() => {

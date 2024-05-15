@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.2.3",
     "@types/react": "npm:types-react@beta",
-    "@types/react-dom": "npm:types-react-dom@beta"
+    "@types/react-dom": "npm:types-react-dom@beta",
+    "next": "^14.3.0-canary.63"
   },
   "devDependencies": {
     "@types/node": "^20",
