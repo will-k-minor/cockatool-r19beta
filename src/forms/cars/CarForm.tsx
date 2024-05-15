@@ -37,7 +37,8 @@ const CarForm: React.FC = () => {
           }
     ];
 
-    const fetchData = async (_previousState: any, formData: FormData) => {
+    const fetchData = async (previousState: any, formData: FormData) => {
+        console.log('previous state', previousState);
         setOptimisticCars(optiCars);
         try {
             await new Promise(resolve => setTimeout(resolve, 3000));
@@ -54,6 +55,7 @@ const CarForm: React.FC = () => {
             setResponse(data);
             return null;
         } catch (error) {
+            setResponse([])
             return 'Something went Wrong!!'
         }
     };
@@ -67,7 +69,7 @@ const CarForm: React.FC = () => {
                 Make
                 <input type="text" name={'make'} disabled={isPending} />
             </label>
-            <button type="submit" disabled={isPending || response.length !== optimisticCars.length }>Submit</button>
+            <button type="submit" disabled={isPending }>Submit</button>
             {error && (<text> {error} </text>)}
         </form>
         <div>
