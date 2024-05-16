@@ -1,4 +1,5 @@
 "use client";
+import CarCard from "./CarCard";
 import "./CarForm.css";
 import React, { useActionState, useOptimistic, useState, useTransition } from 'react';
 
@@ -73,16 +74,19 @@ const CarForm: React.FC = () => {
             {error && (<text> {error} </text>)}
         </form>
         <div>
-            {isPending && (
-                <text> LOADING ... </text>
-            )}
             <text className="header"> Actual REPSONSE </text>
-            {(response) && (
-                <text>{JSON.stringify(response, null, 2)}</text>
-            )}
+            {response.map((car, i) => (
+                <div key={i}>
+                    <CarCard car={car} />
+                </div>
+            ))}
 
             <text className="header"> OPTIMISTIC REPSONSE </text>
-            <text> {JSON.stringify(optimisticCars) }</text>
+            {optimisticCars.map((car, i) => (
+                <div key={i}>
+                    <CarCard car={car} />
+                </div>
+            ))}
         </div>
         </>
     );
